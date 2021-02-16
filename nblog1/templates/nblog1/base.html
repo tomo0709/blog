@@ -1,0 +1,132 @@
+{% load static %}
+{% load nblog1 %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="{% block meta_keywords %}{% endblock %}">
+    <meta name="description" content="{% block meta_description %}{% endblock %}">
+    <title>{% block meta_title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'nblog1/css/style.css' %}">
+    <link rel="stylesheet" href="https://use.typekit.net/wfe6byb.css">
+    <script>
+      (function(d) {
+        var config = {
+          kitId: 'jjv2htu',
+          scriptTimeout: 3000,
+          async: true
+        },
+        h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+      })(document);
+    </script>
+    {% block extrahead %}{% endblock %}
+</head>
+<body>
+
+<main>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</main>
+
+<footer id="site-footer">
+    <div class="container" id="footer-container">
+        {% render_subscribe_section %}
+
+        <hr>
+        <ul class="inline-ul">
+            {% block link %}{% endblock %}
+        </ul>
+        <p id="copyright">{% block copyright %}{% endblock %}</p>
+
+
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', e => {
+
+        const searchForm = document.getElementById('search-form');
+
+        for (const tag of document.getElementsByClassName('tag')) {
+            tag.addEventListener('click', () => {
+                const pk = tag.dataset.pk;
+                const checkbox = document.querySelector(`input[name="tags"][value="${pk}"]`);
+                if (checkbox.checked) {
+                    checkbox.checked = false;
+                } else {
+                    checkbox.checked = true;
+                }
+                searchForm.submit();
+            });
+        }
+
+        for (const check of document.getElementsByName('tags')) {
+            check.addEventListener('change', () => {
+                searchForm.submit();
+            });
+        }
+
+        const getCookie = name => {
+            if (document.cookie && document.cookie !== '') {
+                for (const cookie of document.cookie.split(';')) {
+                    const [key, value] = cookie.trim().split('=');
+                    if (key === name) {
+                        return decodeURIComponent(value);
+                    }
+                }
+            }
+        };
+
+        const csrftoken = getCookie('csrftoken');
+        const subscribeForm = document.getElementById('subscribe-form');
+        const emailErrorArea = document.getElementById('email-errors');
+
+        // 購読ボタンで呼ばれる
+        subscribeForm.addEventListener('submit', e => {
+            // デフォルトのイベントをキャンセルし、ページ遷移しないように!
+            e.preventDefault();
+
+            emailErrorArea.innerHTML = '';
+
+            const url = subscribeForm.action;
+            const mail = encodeURIComponent(document.getElementById('id_mail').value);
+            fetch(url, {
+                method: 'POST',
+                body: `mail=${mail}`,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+                    'X-CSRFToken': csrftoken,
+                },
+            }).then(response => {
+                if (response.ok) {
+                    response.json().then(response => {
+                        const p = document.createElement('p');
+                        p.classList.add('helptext');
+                        p.textContent = response.message;
+                        emailErrorArea.append(p);
+                        document.getElementById('id_mail').disabled = true;
+                        document.getElementById('subscribe-button').disabled = true;
+                    });
+
+                } else {
+                    response.json().then(response => {
+                        for (const emailError of response.mail) {
+                            const p = document.createElement('p');
+                            p.classList.add('helptext');
+                            p.textContent = emailError.message;
+                            emailErrorArea.append(p);
+                        }
+                    });
+                }
+            }).catch(error => {
+                console.log(error);
+            });
+        });
+
+    })
+    ;
+</script>
+</body>
+</html>
