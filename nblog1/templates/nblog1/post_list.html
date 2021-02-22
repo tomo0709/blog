@@ -4,12 +4,14 @@
 {% block meta_title %}記事一覧 - {{ block.super }}{% endblock %}
 
 {% block content %}
+    <div align="right"><a href="{% url 'discussion:disc_list' %}" class="addlink">退出</a></div>
     <form id="search-form" action="" method="GET">
         {{ search_form.key_word }}
         <button type="submit" id="search-button">検索</button>
         <div class="inline-checkbox">
             {{ search_form.tags }}
         </div>
+        <div align="right"><a href="{% url 'nblog1:post_create' %}" class="addlink">新規作成</a></div>
     </form>
 
     <section>

@@ -12,10 +12,22 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from .forms import (
     PostSearchForm, CommentCreateForm, ReplyCreateForm,
-    EmailForm, FileUploadForm
+    EmailForm, FileUploadForm, AdminPostCreateForm
 )
 from .models import Post, Comment, Reply, EmailPush, LinePush, Tag
+from django.urls import reverse_lazy
 
+class PostCreate(generic.CreateView): #add
+    """記事の作成"""
+    form_class = AdminPostCreateForm
+    template_name = 'nblog1/post_create.html'
+    success_url = reverse_lazy('nblog1:top')
+
+class PostDelete(generic.DeleteView): #add
+    """記事の削除"""
+    model = Post
+    template_name = 'nblog1/post_delete.html'
+    success_url = reverse_lazy('nblog1:top')
 
 class PublicPostIndexView(generic.ListView):
     """公開記事の一覧を表示する。"""

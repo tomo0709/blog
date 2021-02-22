@@ -8,6 +8,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,11 +39,16 @@ INSTALLED_APPS = [
     'django.contrib.sites',  # これ
     'django.contrib.sitemaps',  # これ
     'django.contrib.humanize',  # これ
+    'django_cleanup',
     'allauth', # new
     'allauth.account', # new
     'allauth.socialaccount', # new
     'allauth.socialaccount.providers.github', # new
+    'accounts.apps.AccountsConfig', #グループ機能
+    'discussion.apps.DiscussionConfig', #グループ機能
 ]
+
+AUTH_USER_MODEL = 'accounts.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -59,7 +65,7 @@ ROOT_URLCONF = 'blog.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -125,7 +131,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # アップロードファイルの設定
-import os
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -155,4 +160,5 @@ AUTHENTICATION_BACKENDS = (
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
-LOGIN_REDIRECT_URL = 'blog:top'
+LOGIN_REDIRECT_URL = 'discussion:disc_list'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'

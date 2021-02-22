@@ -1,0 +1,20 @@
+{% extends 'discussion/base.html' %}
+
+{% block content %}
+<h1 style="margin: 0px;">
+<a href="{% url 'discussion:disc_list' %}">◀</a>
+グループの削除
+</h1>
+
+<form method="post">{% csrf_token %}
+    <p>このグループを削除しますか？</p>
+    <input type="submit" value="削除する">
+    <input type="button"
+        onclick="location.href='{% url 'discussion:disc_list' %}'"
+        value="キャンセル">
+</form>
+
+<table>
+    <tr><th>グループ</th><td>{{ object.name }}</td></tr>
+</table>
+{% endblock %}

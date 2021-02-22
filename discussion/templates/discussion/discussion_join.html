@@ -1,0 +1,24 @@
+{% extends 'discussion/base.html' %}
+
+{% block content %}
+<h1 style="margin: 0px;">
+<a href="{% url 'discussion:disc_list' %}">◀</a>
+グループに参加
+</h1>
+
+<div>&nbsp;</div>
+
+<p>
+{{ view.discussion }} に招待されています。参加しますか？
+</p>
+
+<form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="discussion" value="{{ view.discussion.id }}">
+    <input type="hidden" name="user" value="{{ view.request.user.id }}">
+    <input type="submit" value="参加">
+    <input type="button"
+        onclick="location.href='{% url 'discussion:disc_list' %}'"
+        value="あとで">
+</form>
+{% endblock %}

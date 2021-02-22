@@ -1,0 +1,63 @@
+{% extends 'discussion/base.html' %}
+
+{% block content %}
+
+{% if view.invitations %}
+<div style="border:solid thin lightgray; border-radius:10px; padding: 10px; margin:5px 0 20px;">
+<p><strong>招待されているグループ</strong></p>
+<table>
+    <tr>
+        <th>グループ名</th>
+        <th>招待主の ID</th>
+        <th>招待の期限</th>
+    </tr>
+    {% for item in view.invitations %}
+    <tr>
+        <td>{{ item.discussion }}</td>
+        <td>{{ item.inviter.username }}</td>
+        {% if item.expired %}
+            <td style="color:red;">{{ item.exp_dt }}</td>
+        {% else %}
+            <td>{{ item.exp_dt }}</td>
+        {% endif %}
+        <td>
+            <a href="{% url 'discussion:disc_join' invt_id=item.id %}" class="addlink">参加</a>
+            <a href="{% url 'discussion:invt_delete' pk=item.id from='disc_list' %}" class="deletelink">削除</a>
+        </td>
+    </tr>
+{% endfor %}
+</table>
+</div>
+{% endif %}
+
+<h1 style="margin: 0px;">参加しているグループ</h1>
+<div align="right"><a href="{% url 'discussion:disc_create' %}" class="addlink">新規作成</a></div>
+
+<table>
+    <tr>
+        <th>グループ</th>
+        <th>所有権</th>
+        <th>編集権</th>
+    </tr>
+    {% for item in object_list %}
+    <tr>
+        <td>
+            <a href="{% url 'nblog1:top' %}" class="changelink">{{ item.discussion }}</a>
+        </td>
+        <td>{{ item.is_owner }}</td>
+        <td>{{ item.is_editor }}</td>
+        {% if item.is_owner %}
+        <td>
+            <a href="{% url 'discussion:invt_create' disc_id=item.discussion.id %}" class="changelink">招待</a>
+            <a href="{% url 'discussion:disc_update' pk=item.discussion.id %}" class="changelink">編集</a>
+        </td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+
+<div style="margin-top: 20px;">
+<a>▶台本一覧</a>
+</div>
+
+{% endblock %}

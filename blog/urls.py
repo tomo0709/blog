@@ -20,8 +20,9 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('nblog1.urls')),
-    path('accounts/', include('allauth.urls')), # new
+    path('blog/', include('nblog1.urls')),
+    path('accounts/', include('allauth.urls')), 
+    path('', include('discussion.urls')), # new
 ]
 
 # 開発環境でのメディアファイルの配信設定

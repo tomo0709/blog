@@ -1,0 +1,38 @@
+{% extends 'discussion/base.html' %}
+
+{% block content %}
+<h1 style="margin: 0px;">
+{% if view.kwargs.from == 'usr_list' %}
+<a href="{% url 'discussion:usr_list' disc_id=object.discussion.id %}">◀</a>
+{% else %}
+<a href="{% url 'discussion:disc_list' %}">◀</a>
+{% endif %}
+グループへの招待の削除
+</h1>
+
+<form method="post">{% csrf_token %}
+    <p>この招待を削除しますか？</p>
+    <input type="submit" value="削除する">
+    <input type="button"
+        {% if view.kwargs.from == 'usr_list' %}
+        onclick="location.href='{% url 'discussion:usr_list' disc_id=object.discussion.id %}'"
+        {% else %}
+        onclick="location.href='{% url 'discussion:disc_list' %}'"
+        {% endif %}
+        value="キャンセル">
+</form>
+
+<table>
+    <tr><th>グループ</th><td>{{ object.discussion }}</td></tr>
+    <tr><th>招待される人の ID</th><td>{{ object.invitee.username }}</td></tr>
+    <tr><th>姓</th><td>{{ object.invitee.last_name }}</td></tr>
+    <tr><th>名</th><td>{{ object.invitee.first_name }}</td></tr>
+    <tr><th>期限</th>
+    {% if object.expired %}
+        <td style="color:red;">{{ object.exp_dt }}</td>
+    {% else %}
+        <td>{{ object.exp_dt }}</td>
+    {% endif %}
+    </tr>
+</table>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'discussion/base.html' %}
+
+{% block content %}
+
+{% if view.disc_user.is_owner and view.invitations %}
+<div style="border:solid thin lightgray; border-radius:10px; padding: 10px; margin:5px 0 20px;">
+<p><strong>招待中のユーザ</strong></p>
+<table>
+    <tr>
+        <th>ユーザ ID</th>
+        <th>姓</th>
+        <th>名</th>
+        <th>招待の期限</th>
+    </tr>
+    {% for item in view.invitations %}
+    <tr>
+        <td>{{ item.invitee.username }}</td>
+        <td>{{ item.invitee.last_name }}</td>
+        <td>{{ item.invitee.first_name }}</td>
+        {% if item.expired %}
+            <td style="color:red;">{{ item.exp_dt }}</td>
+        {% else %}
+            <td>{{ item.exp_dt }}</td>
+        {% endif %}
+        <td><a href="{% url 'discussion:invt_delete' pk=item.id from='usr_list' %}" class="deletelink">削除</a></td>
+    </tr>
+{% endfor %}
+</table>
+</div>
+{% endif %}
+
+<h1 style="margin: 0;">
+<a>◀</a>
+メンバ一覧
+</h1>
+{% if view.disc_user.is_owner %}
+<div align="right"><a href="{% url 'discussion:invt_create' disc_id=disc_id %}" class="addlink">招待する</a></div>
+{% else %}
+<div>&nbsp;</div>
+{% endif %}
+
+<table>
+    <tr>
+        <th>ユーザ名</th>
+        <th>ID</th>
+        <th>所有権</th>
+        <th>編集権</th>
+    </tr>
+    {% for item in object_list %}
+    <tr>
+        <td>{{ item }}</td>
+        <td>{{ item.user.username }}</td>
+        <td>{{ item.is_owner }}</td>
+        <td>{{ item.is_editor }}</td>
+        {% if view.disc_user.is_owner %}
+        <td>
+            <a href="{% url 'discussion:usr_update' pk=item.id %}" class="changelink">編集</a>
+        </td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
