@@ -30,34 +30,19 @@
 </div>
 {% endif %}
 
-<h1 style="margin: 0px;">参加しているグループ</h1>
+<h3 style="margin: 0px;">参加グループ一覧</h3>
 <div align="right"><a href="{% url 'discussion:disc_create' %}" class="addlink">新規作成</a></div>
 
-<table>
-    <tr>
-        <th>グループ</th>
-        <th>所有権</th>
-        <th>編集権</th>
-    </tr>
+<nav aria-label="breadcrumb">
     {% for item in object_list %}
-    <tr>
-        <td>
-            <a href="{% url 'nblog1:top' %}" class="changelink">{{ item.discussion }}</a>
-        </td>
-        <td>{{ item.is_owner }}</td>
-        <td>{{ item.is_editor }}</td>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'nblog1:top' %}">{{ item.discussion }}</a></li>
         {% if item.is_owner %}
-        <td>
-            <a href="{% url 'discussion:invt_create' disc_id=item.discussion.id %}" class="changelink">招待</a>
-            <a href="{% url 'discussion:disc_update' pk=item.discussion.id %}" class="changelink">編集</a>
-        </td>
+        <li class="breadcrumb-item"><a href="{% url 'discussion:invt_create' disc_id=item.discussion.id %}">招待</a></li>
+        <li class="breadcrumb-item active"><a href="{% url 'discussion:disc_update' pk=item.discussion.id %}">編集</a></li>
         {% endif %}
-    </tr>
+    </ol>
     {% endfor %}
-</table>
-
-<div style="margin-top: 20px;">
-<a>▶台本一覧</a>
-</div>
+</nav>
 
 {% endblock %}

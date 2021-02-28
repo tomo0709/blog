@@ -21,17 +21,7 @@
             {% block header %}
             <nav class="navbar navbar-dark bg-dark">
                 <a class="navbar-brand">共有Web</a>
-                <form class="form-inline" action="" method="GET">
-                        {{ search_form.key_word }}
-                    <a>&nbsp;</a>
-                    <button class="btn btn-light" type="submit">検索</button>
-                    <a>&nbsp;&nbsp;&nbsp;</a>
-                    <div class="inline-checkbox">
-                        {{ search_form.tags }}
-                    </div>
-                    <a>&nbsp;&nbsp;</a>
                     <a href="{% url 'discussion:disc_list' %}" class="badge badge-light">グループを退出</a>
-                </form>
             </nav>
             {% endblock %}
         </header>

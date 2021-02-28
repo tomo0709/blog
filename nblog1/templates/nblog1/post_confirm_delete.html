@@ -1,0 +1,17 @@
+{% extends 'nblog1/base_site_detail.html' %}
+
+{% block content %}
+    </br>
+    <a>本当に削除しますか？</a>
+    </br>
+    </br>
+    <form method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-secondary">はい</button>
+    </form>
+    <div style="display:inline;">
+        {% csrf_token %}
+        <a href="{% url 'nblog1:post_detail' post.pk %}" class="btn btn-secondary">いいえ</a>
+    </form>
+
+{% endblock %}

@@ -22,11 +22,23 @@ class PostCreate(generic.CreateView): #add
     form_class = AdminPostCreateForm
     template_name = 'nblog1/post_create.html'
     success_url = reverse_lazy('nblog1:top')
+'''
+    def form_valid(self, form):
+        form.save()
+        #super(PostCreate, self).form_valid(form)
+        print(dir(self.request))
+        print(self.request.POST)
+        print(self.request.FILES)
 
+        if self.request.FILES:
+            print(self.request.FILES)
+        return redirect(self.success_url)
+        # return image_upload(self.request)
+'''
 class PostDelete(generic.DeleteView): #add
     """記事の削除"""
     model = Post
-    template_name = 'nblog1/post_delete.html'
+    # template_name = 'nblog1/post_confirm_delete.html'
     success_url = reverse_lazy('nblog1:top')
 
 class PublicPostIndexView(generic.ListView):
@@ -232,9 +244,8 @@ def line_callback(request):
 
     return HttpResponse()
 
-
+"""
 def image_upload(request):
-    """ファイルのアップロード用ビュー"""
     form = FileUploadForm(files=request.FILES)
     if form.is_valid():
         path = form.save()
@@ -245,7 +256,13 @@ def image_upload(request):
         )
         return JsonResponse({'url': url})
     return HttpResponseBadRequest()
+"""
 
+def image_upload(request):
+    """ファイルのアップロード用ビュー"""
+    if request.FILES:
+        print(request.FILES)
+    return HttpResponse()
 
 def posts_suggest(request):
     """サジェスト候補の記事をJSONで返す。"""

@@ -22,6 +22,7 @@ class Post(models.Model):
     """記事"""
     title = models.CharField('タイトル', max_length=32)
     text = models.TextField('本文')
+    attachment = models.FileField('ファイルの追加', blank=True)
     tags = models.ManyToManyField(Tag, verbose_name='タグ', blank=True)
 
     relation_posts = models.ManyToManyField('self', verbose_name='関連記事', blank=True)

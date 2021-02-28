@@ -1,0 +1,24 @@
+{% extends "account/base.html" %}
+
+{% block head_title %}サインアウト{% endblock %}
+
+{% block content %}
+
+<p>本当にサインアウトしますか？</p>
+
+
+  <form method="post" action="{% url 'account_logout' %}" style="display:inline;">
+    {% csrf_token %}
+    {% if redirect_field_value %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+    {% endif %}
+    <button type="submit">はい</button>
+  </form>
+  <form method="post" action="{% url 'account_login' %}" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit">いいえ</button>
+  </form>
+
+
+
+{% endblock %}
